@@ -11,16 +11,13 @@ let assignments = {};
 assignments.listAll = (req, res) => {
   return new Promise((resolve, reject) => {
       gitlab.projects.all((projects) => {
-        //let classes = [];
-        //for (let project of projects) {
-        //  if (project.name.indexOf('-') != -1) {
-        //    classes.push(project);
-        //  }
-        //}
         resolve(projects);
       });
     }
-  ).then((val) => {
+  ).then((projects) => {
+    let filterFactory = require('../helpers/filters');
+    let val = filterFactory.assignmentsFilter(projects);
+    console.log(filterFactory);
     res.writeHead(200, {'Content-Type': 'application/json'});
     res.write(JSON.stringify(val));
     res.end();

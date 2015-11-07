@@ -1,7 +1,7 @@
 swagger: "2.0"
 info:
   version: "0.0.1"
-  title: Hello World App
+  title: gitlab classroom
 # during dev, should point to your local machine
 host: localhost:10010
 # basePath prefixes all resource paths 
@@ -103,6 +103,18 @@ paths:
             description: Error
             schema:
               $ref: "#/definitions/ErrorResponse"
+  /assignments:
+      x-swagger-router-controller: assignments
+      get:
+        description: get all assignments involved, ranked by days left.
+        operationId: listAll
+        responses:
+          "200":
+            description: Success
+          default:
+            description: Error
+            schema:
+              $ref: "#/definitions/ErrorResponse"
   /hello:
     # binds a127 app logic to a route
     x-swagger-router-controller: hello_world
@@ -127,18 +139,6 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /assignments:
-      x-swagger-router-controller: assignments
-      get:
-        description: get all assignments involved, ranked by deadline.
-        operationId: listAll
-        responses:
-          "200":
-            description: Success
-          default:
-            description: Error
-            schema:
-              $ref: "#/definitions/ErrorResponse"
 # complex objects have schema definitions
 definitions:
   DefaultResponse:
