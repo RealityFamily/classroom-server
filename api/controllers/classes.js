@@ -54,7 +54,9 @@ classes.listAssignments = (req, res) => {
         resolve(assignments);
       });
     }
-  ).then((val)=> {
+  ).then((assignments)=> {
+    let filterFactory = require('../helpers/filters');
+    let val = filterFactory.assignmentsFilter(assignments);
     res.writeHead(200, {'Content-Type': 'application/json'});
     res.write(JSON.stringify(val));
     res.end();

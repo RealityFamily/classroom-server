@@ -25,6 +25,11 @@ filterFactory.assignmentFilter = (project, strictMode) => {
   if (!ddl || (strictMode && project["forked_from_project"])) {
     return null;
   }
+  let nameObj = project.description.match(/^(\S+)\s+%ddl:\S+%/);
+  if (nameObj) {
+    project.description = nameObj[1];
+  }
+
   project.deadline = new Date(ddl[1]);
   project.daysLeft = Math.floor((project.deadline - Date.now()) / 1000 / 24 / 3600);
   if (project["forked_from_project"]) {
