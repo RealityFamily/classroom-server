@@ -40,7 +40,7 @@ filterFactory.assignmentFilter = (project, strictMode) => {
   if (project["forked_from_project"]) {
     project.class = project["forked_from_project"]["name_with_namespace"].match(/^(\S+)/)[1];
   } else {
-    project.class = "";
+    project.class = project["name_with_namespace"].match(/^(\S+)/)[1];
   }
 
   project.item_type = 'assignment';
