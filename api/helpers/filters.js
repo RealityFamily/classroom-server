@@ -6,7 +6,7 @@
 
 let filterFactory = {};
 
-filterFactory.assignmentsFilter = (projects, strictMode) => {
+filterFactory.assignmentsFilter = (projects, strictMode, asec) => {
   let results = [];
   for (let project of projects) {
     let result = filterFactory.assignmentFilter(project, strictMode);
@@ -15,7 +15,12 @@ filterFactory.assignmentsFilter = (projects, strictMode) => {
     }
   }
   results.sort((a, b)=> {
-    return a.daysLeft - b.daysLeft;
+    if (asec) {
+      return (a.daysLeft - b.daysLeft) && b.daysLeft >= 0;
+    }else{
+      return b.daysLeft - a.daysLeft;
+    }
+
   });
   return results;
 };
