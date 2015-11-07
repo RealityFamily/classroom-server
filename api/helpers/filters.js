@@ -6,26 +6,31 @@
 
 let filterFactory = {};
 
-filterFactory.assignmentsFilter = (projects) => {
+filterFactory.assignmentsFilter = (projects, strictMode, asec) => {
   let results = [];
   for (let project of projects) {
-    let result = filterFactory.assignmentFilter(project);
+    let result = filterFactory.assignmentFilter(project, strictMode);
     if (result) {
       results.push(project);
     }
   }
   results.sort((a, b)=> {
-    return a.daysLeft - b.daysLeft;
+    if (asec) {
+      return (a.daysLeft - b.daysLeft) && b.daysLeft >= 0;
+    }else{
+      return b.daysLeft - a.daysLeft;
+    }
+
   });
   return results;
 };
 
 filterFactory.assignmentFilter = (project, strictMode) => {
   let ddl = project.description.match(/%ddl:(\S*)%/);
-  if (!ddl || (strictMode && project["forked_from_project"])) {
+  if (!ddl || (strictMode && !project["forked_from_project"])) {
     return null;
   }
-  let nameObj = project.description.match(/^(\S+)\s+%ddl:\S+%/);
+  let nameObj = project.description.match(/^(\S*)\s*%ddl:\S+%/);
   if (nameObj) {
     project.description = nameObj[1];
   }
