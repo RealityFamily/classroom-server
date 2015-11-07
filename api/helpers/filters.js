@@ -30,7 +30,7 @@ filterFactory.assignmentFilter = (project, strictMode) => {
   if (!ddl || (strictMode && !project["forked_from_project"])) {
     return null;
   }
-  let nameObj = project.description.match(/^(\S+)\s+%ddl:\S+%/);
+  let nameObj = project.description.match(/^(\S*)\s*%ddl:\S+%/);
   if (nameObj) {
     project.description = nameObj[1];
   }
