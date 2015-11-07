@@ -100,7 +100,9 @@ classes.listMembers = (req, res) => {
         resolve(members);
       });
     }
-  ).then((val)=> {
+  ).then((members)=> {
+    let filterFactory = require('../helpers/filters');
+    let val = filterFactory.membersFilter(members);
     res.writeHead(200, {'Content-Type': 'application/json'});
     res.write(JSON.stringify(val));
     res.end();

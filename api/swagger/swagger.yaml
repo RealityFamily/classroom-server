@@ -106,7 +106,7 @@ paths:
   /assignments:
       x-swagger-router-controller: assignments
       get:
-        description: get all assignments involved, ranked by days left.
+        description: get all assignments involved, ranked by days
         operationId: listAll
         responses:
           "200":
@@ -115,30 +115,47 @@ paths:
             description: Error
             schema:
               $ref: "#/definitions/ErrorResponse"
-  /hello:
-    # binds a127 app logic to a route
-    x-swagger-router-controller: hello_world
-    get:
-      description: Returns 'Hello' to the caller
-      # used as the method name of the controller
-      operationId: hello
-      parameters:
-        - name: name
-          in: query
-          description: The name of the person to whom to say hello
-          required: false
+  /assignments/{id}:
+      x-swagger-router-controller: assignments
+      get:
+        description: get a specific assignment
+        operationId: get
+        parameters:
+        - name: id
+          in: path
+          description: class id
+          required: true
           type: string
-      responses:
-        "200":
-          description: Success
-          schema:
-            # a pointer to a definition
-            $ref: "#/definitions/DefaultResponse"
-        # responses may fall through to errors
-        default:
-          description: Error
-          schema:
-            $ref: "#/definitions/ErrorResponse"
+        responses:
+          "200":
+            description: Success
+          default:
+            description: Error
+            schema:
+              $ref: "#/definitions/ErrorResponse"
+  /hello:
+      x-swagger-router-controller: hello_world
+      get:
+        description: Returns 'Hello' to the caller
+        # used as the method name of the controller
+        operationId: hello
+        parameters:
+          - name: name
+            in: query
+            description: The name of the person to whom to say hello
+            required: false
+            type: string
+        responses:
+          "200":
+            description: Success
+            schema:
+              # a pointer to a definition
+              $ref: "#/definitions/DefaultResponse"
+          # responses may fall through to errors
+          default:
+            description: Error
+            schema:
+              $ref: "#/definitions/ErrorResponse"
 # complex objects have schema definitions
 definitions:
   DefaultResponse:

@@ -24,4 +24,21 @@ assignments.listAll = (req, res) => {
   });
 };
 
+assignments.get = (req, res) => {
+  let id = req.swagger.params.id.value;
+  return new Promise((resolve, reject) => {
+    gitlab.projects.show(id, (project) => {
+        resolve(project);
+      });
+    }
+  ).then((project) => {
+    let filterFactory = require('../helpers/filters');
+    let val = filterFactory.assignmentFilter(project);
+    console.log(filterFactory);
+    res.writeHead(200, {'Content-Type': 'application/json'});
+    res.write(JSON.stringify(val));
+    res.end();
+  });
+};
+
 module.exports = assignments;
