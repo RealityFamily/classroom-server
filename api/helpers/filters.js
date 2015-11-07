@@ -6,10 +6,10 @@
 
 let filterFactory = {};
 
-filterFactory.assignmentsFilter = (projects) => {
+filterFactory.assignmentsFilter = (projects, strictMode) => {
   let results = [];
   for (let project of projects) {
-    let result = filterFactory.assignmentFilter(project);
+    let result = filterFactory.assignmentFilter(project, strictMode);
     if (result) {
       results.push(project);
     }
@@ -22,7 +22,7 @@ filterFactory.assignmentsFilter = (projects) => {
 
 filterFactory.assignmentFilter = (project, strictMode) => {
   let ddl = project.description.match(/%ddl:(\S*)%/);
-  if (!ddl || (strictMode && project["forked_from_project"])) {
+  if (!ddl || (strictMode && !project["forked_from_project"])) {
     return null;
   }
   let nameObj = project.description.match(/^(\S+)\s+%ddl:\S+%/);
