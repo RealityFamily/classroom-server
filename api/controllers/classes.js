@@ -47,11 +47,11 @@ classes.listAssignments = (req, res) => {
       gitlab.groups.listProjects(id, function (projects) {
         let assignments = [];
         for (let project of projects) {
-          if (group.name != 'syllabus') {
-            resolve(group);
+          if (project.name != 'syllabus') {
+            assignments.push(project);
           }
         }
-        resolve(projects);
+        resolve(assignments);
       });
     }
   ).then((val)=> {
@@ -109,5 +109,31 @@ classes.listMembers = (req, res) => {
   });
 };
 
+classes.listNotifications = (req, res) => {
+  let id = req.swagger.params.id.value;
+  return new Promise((resolve, reject) => {
+      gitlab.groups.listProjects(id, function (projects) {
+        for (let project of projects) {
+          if (project.name == 'syllabus') {
+            resolve(project);
+          }
+        }
+      });
+    }
+  ).then((syllabus)=> {
+    return new Promise((resolve, reject) => {
+        gitlab.projects.issues.list(syllabus.id, function (issues) {
+          resolve(issues);
+        });
+      }
+    )
+  }).then((issues)=> {
+    let filterFactory = require('../helpers/filters');
+    let val = filterFactory.notificationsFilter(issues);
+    res.writeHead(200, {'Content-Type': 'application/json'});
+    res.write(JSON.stringify(val));
+    res.end();
+  });
+};
 
 module.exports = classes;

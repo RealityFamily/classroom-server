@@ -17,7 +17,6 @@ assignments.listAll = (req, res) => {
   ).then((projects) => {
     let filterFactory = require('../helpers/filters');
     let val = filterFactory.assignmentsFilter(projects);
-    console.log(filterFactory);
     res.writeHead(200, {'Content-Type': 'application/json'});
     res.write(JSON.stringify(val));
     res.end();
