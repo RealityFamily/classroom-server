@@ -67,6 +67,42 @@ paths:
             description: Error
             schema:
               $ref: "#/definitions/ErrorResponse"
+  /classes/{id}/materials:
+      x-swagger-router-controller: classes
+      get:
+        description: get all materials of a class
+        operationId: listMaterials
+        parameters:
+        - name: id
+          in: path
+          description: class id
+          required: true
+          type: string
+        responses:
+          "200":
+            description: Success
+          default:
+            description: Error
+            schema:
+              $ref: "#/definitions/ErrorResponse"
+  /classes/{id}/members:
+      x-swagger-router-controller: classes
+      get:
+        description: get all members of a class
+        operationId: listMembers
+        parameters:
+        - name: id
+          in: path
+          description: class id
+          required: true
+          type: string
+        responses:
+          "200":
+            description: Success
+          default:
+            description: Error
+            schema:
+              $ref: "#/definitions/ErrorResponse"
   /hello:
     # binds a127 app logic to a route
     x-swagger-router-controller: hello_world
@@ -91,6 +127,18 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+  /assignments:
+      x-swagger-router-controller: assignments
+      get:
+        description: get all assignments involved, ranked by deadline.
+        operationId: listAll
+        responses:
+          "200":
+            description: Success
+          default:
+            description: Error
+            schema:
+              $ref: "#/definitions/ErrorResponse"
 # complex objects have schema definitions
 definitions:
   DefaultResponse:
