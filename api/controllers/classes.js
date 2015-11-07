@@ -67,7 +67,6 @@ classes.listMaterials = (req, res) => {
       gitlab.groups.listProjects(id, function (projects) {
         for (let project of projects) {
           if (project.name == 'syllabus') {
-            console.log(project.id);
             resolve(project);
           }
         }
@@ -76,17 +75,12 @@ classes.listMaterials = (req, res) => {
   ).then((syllabus)=> {
     return new Promise((resolve, reject) => {
       gitlab.projects.repository.listTree(syllabus.id, function (list) {
-        console.log(list);
         resolve(list);
       });
     });
-  }).then((list)=> {
-    let val = [];
-    for (let item of list) {
-      if (item.name.indexOf('.') != 0 && item.name.indexOf("README.md") == -1) {
-        val.push(item);
-      }
-    }
+  }).then((materials)=> {
+    let filterFactory = require('../helpers/filters');
+    let val = filterFactory.materialsFilter(materials);
     res.writeHead(200, {'Content-Type': 'application/json'});
     res.write(JSON.stringify(val));
     res.end();
@@ -130,6 +124,35 @@ classes.listNotifications = (req, res) => {
   }).then((issues)=> {
     let filterFactory = require('../helpers/filters');
     let val = filterFactory.notificationsFilter(issues);
+    res.writeHead(200, {'Content-Type': 'application/json'});
+    res.write(JSON.stringify(val));
+    res.end();
+  });
+};
+
+classes.listActivities = (req, res) => {
+  let id = req.swagger.params.id.value;
+  return new Promise((resolve, reject) => {
+      gitlab.groups.listProjects(id, function (projects) {
+        for (let project of projects) {
+          if (project.name == 'syllabus') {
+            let activitiesObj = {'syllabus': project, 'assignments': projects};
+            resolve(activitiesObj);
+          }
+        }
+      });
+    }
+  ).then((activitiesObj)=> {
+    return new Promise((resolve, reject) => {
+        gitlab.projects.issues.list(activitiesObj.syllabus.id, function (issues) {
+          activitiesObj.notifications = issues;
+          resolve(activitiesObj);
+        });
+      }
+    )
+  }).then((activitiesObj)=> {
+    let filterFactory = require('../helpers/filters');
+    let val = filterFactory.activitiesFilter(activitiesObj);
     res.writeHead(200, {'Content-Type': 'application/json'});
     res.write(JSON.stringify(val));
     res.end();

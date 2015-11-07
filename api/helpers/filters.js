@@ -20,14 +20,20 @@ filterFactory.assignmentsFilter = (projects) => {
   return results;
 };
 
-filterFactory.assignmentFilter = (project) => {
+filterFactory.assignmentFilter = (project, strictMode) => {
   let ddl = project.description.match(/%ddl:(\S*)%/);
-  if (!project["forked_from_project"] || !ddl) {
+  if (!ddl || (strictMode && project["forked_from_project"])) {
     return null;
   }
   project.deadline = new Date(ddl[1]);
   project.daysLeft = Math.floor((project.deadline - Date.now()) / 1000 / 24 / 3600);
-  project.class = project["forked_from_project"]["name_with_namespace"].match(/^(\S+)/)[1];
+  if (project["forked_from_project"]) {
+    project.class = project["forked_from_project"]["name_with_namespace"].match(/^(\S+)/)[1];
+  } else {
+    project.class = "";
+  }
+
+  project.item_type = 'assignment';
   return project;
 };
 
@@ -42,6 +48,7 @@ filterFactory.memberFilter = (member) => {
 
   delete member.access_level;
 
+  member.item_type = 'member';
   return member;
 };
 
@@ -57,6 +64,8 @@ filterFactory.notificationFilter = (notification) => {
     return null;
   }
   delete notification.assignee;
+
+  notification.item_type = 'notification';
   return notification;
 };
 
@@ -68,6 +77,40 @@ filterFactory.notificationsFilter = (notifications) => {
       results.push(result);
     }
   }
+  return results;
+};
+
+filterFactory.materialFilter = (material) => {
+  if (material.name.indexOf('.') == 0 || material.name.indexOf("README.md") != -1) {
+    return null;
+  }
+
+  material.item_type = 'material';
+  return material;
+};
+
+filterFactory.materialsFilter = (materials) => {
+  let results = [];
+  for (let material of materials) {
+    let result = filterFactory.materialFilter(material);
+    if (result) {
+      results.push(result);
+    }
+  }
+  return results;
+};
+
+filterFactory.activitiesFilter = (activitiesObj) => {
+  let notifications = filterFactory.notificationsFilter(activitiesObj.notifications);
+  let assignments = filterFactory.assignmentsFilter(activitiesObj.assignments);
+
+  let results = assignments.concat(notifications);
+  results.sort((a, b)=> {
+    let a_time = a.last_activity_at || a.updated_at;
+    let b_time = b.last_activity_at || b.updated_at;
+    return new Date(b_time) - new Date(a_time);
+  });
+
   return results;
 };
 
