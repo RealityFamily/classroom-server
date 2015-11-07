@@ -159,7 +159,7 @@ paths:
         parameters:
         - name: id
           in: path
-          description: class id
+          description: assignment id
           required: true
           type: string
         responses:
@@ -169,25 +169,20 @@ paths:
             description: Error
             schema:
               $ref: "#/definitions/ErrorResponse"
-  /hello:
-      x-swagger-router-controller: hello_world
+  /users/{id}:
+      x-swagger-router-controller: users
       get:
-        description: Returns 'Hello' to the caller
-        # used as the method name of the controller
-        operationId: hello
+        description: get a specific user
+        operationId: get
         parameters:
-          - name: name
-            in: query
-            description: The name of the person to whom to say hello
-            required: false
-            type: string
+        - name: id
+          in: path
+          description: user id, user "me" get get current user
+          required: true
+          type: string
         responses:
           "200":
             description: Success
-            schema:
-              # a pointer to a definition
-              $ref: "#/definitions/DefaultResponse"
-          # responses may fall through to errors
           default:
             description: Error
             schema:
