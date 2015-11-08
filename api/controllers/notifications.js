@@ -4,7 +4,7 @@
 "use strict";
 
 let commons = require('./commons');
-let gitlab = require('gitlab')(commons.authObj);
+let apiwrap = require('./apibase').apiwrap;
 
 let notifications = {};
 

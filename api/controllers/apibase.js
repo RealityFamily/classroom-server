@@ -28,7 +28,7 @@ apibase.apiwrap = (func) => {
       url: 'https://git.fdu13ss.org',
       token: cookies.token
     });
-    return func(req, res, gitlab);
+    return func(req, res, userGitlab);
   }
 };
 

@@ -3,13 +3,11 @@
  */
 "use strict";
 
-let commons = require('./commons');
-let gitlab = require('gitlab')(commons.authObj);
 let apiwrap = require('./apibase').apiwrap;
 
 let classes = {};
 
-classes.listAll = apiwrap((req, res) => {
+classes.listAll = apiwrap((req, res, gitlab) => {
   return new Promise((resolve, reject) => {
       gitlab.groups.all((groups) => {
         let classes = [];
@@ -28,7 +26,7 @@ classes.listAll = apiwrap((req, res) => {
   });
 });
 
-classes.get = (req, res) => {
+classes.get = apiwrap((req, res, gitlab) => {
   let id = req.swagger.params.id.value;
   return new Promise((resolve, reject) => {
       gitlab.groups.show(id, function (group) {
@@ -40,9 +38,9 @@ classes.get = (req, res) => {
     res.write(JSON.stringify(val));
     res.end();
   });
-};
+});
 
-classes.listAssignments = (req, res) => {
+classes.listAssignments = apiwrap((req, res, gitlab) => {
   let id = req.swagger.params.id.value;
   return new Promise((resolve, reject) => {
       gitlab.groups.listProjects(id, function (projects) {
@@ -62,9 +60,9 @@ classes.listAssignments = (req, res) => {
     res.write(JSON.stringify(val));
     res.end();
   });
-};
+});
 
-classes.listMaterials = (req, res) => {
+classes.listMaterials = apiwrap((req, res, gitlab) => {
   let id = req.swagger.params.id.value;
   return new Promise((resolve, reject) => {
       gitlab.groups.listProjects(id, function (projects) {
@@ -88,9 +86,9 @@ classes.listMaterials = (req, res) => {
     res.write(JSON.stringify(val));
     res.end();
   });
-};
+});
 
-classes.listMembers = (req, res) => {
+classes.listMembers = apiwrap((req, res, gitlab) => {
   let id = req.swagger.params.id.value;
   return new Promise((resolve, reject) => {
       gitlab.groups.listMembers(id, function (members) {
@@ -104,9 +102,9 @@ classes.listMembers = (req, res) => {
     res.write(JSON.stringify(val));
     res.end();
   });
-};
+});
 
-classes.listNotifications = (req, res) => {
+classes.listNotifications = apiwrap((req, res, gitlab) => {
   let id = req.swagger.params.id.value;
   return new Promise((resolve, reject) => {
       gitlab.groups.listProjects(id, function (projects) {
@@ -131,9 +129,9 @@ classes.listNotifications = (req, res) => {
     res.write(JSON.stringify(val));
     res.end();
   });
-};
+});
 
-classes.listActivities = (req, res) => {
+classes.listActivities = apiwrap((req, res, gitlab) => {
   let id = req.swagger.params.id.value;
   return new Promise((resolve, reject) => {
       gitlab.groups.listProjects(id, function (projects) {
@@ -160,6 +158,6 @@ classes.listActivities = (req, res) => {
     res.write(JSON.stringify(val));
     res.end();
   });
-};
+});
 
 module.exports = classes;

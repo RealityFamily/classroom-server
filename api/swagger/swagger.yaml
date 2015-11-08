@@ -47,6 +47,11 @@ paths:
           description: class id
           required: true
           type: string
+        - name: Cookie
+          in: header
+          description: token in cookie
+          type: string
+          required: true
         responses:
           "200":
             description: Success
@@ -65,6 +70,11 @@ paths:
           description: class id
           required: true
           type: string
+        - name: Cookie
+          in: header
+          description: token in cookie
+          type: string
+          required: true
         responses:
           "200":
             description: Success
@@ -83,6 +93,11 @@ paths:
           description: class id
           required: true
           type: string
+        - name: Cookie
+          in: header
+          description: token in cookie
+          type: string
+          required: true
         responses:
           "200":
             description: Success
@@ -101,6 +116,11 @@ paths:
           description: class id
           required: true
           type: string
+        - name: Cookie
+          in: header
+          description: token in cookie
+          type: string
+          required: true
         responses:
           "200":
             description: Success
@@ -119,6 +139,11 @@ paths:
           description: class id
           required: true
           type: string
+        - name: Cookie
+          in: header
+          description: token in cookie
+          type: string
+          required: true
         responses:
           "200":
             description: Success
@@ -137,6 +162,11 @@ paths:
           description: class id
           required: true
           type: string
+        - name: Cookie
+          in: header
+          description: token in cookie
+          type: string
+          required: true
         responses:
           "200":
             description: Success
@@ -149,6 +179,12 @@ paths:
       get:
         description: get all assignments involved, ranked by days
         operationId: listAll
+        parameters:
+        - name: Cookie
+          in: header
+          description: token in cookie
+          type: string
+          required: true
         responses:
           "200":
             description: Success
@@ -167,6 +203,11 @@ paths:
           description: assignment id
           required: true
           type: string
+        - name: Cookie
+          in: header
+          description: token in cookie
+          type: string
+          required: true
         responses:
           "200":
             description: Success
@@ -185,6 +226,11 @@ paths:
           description: user id, user "me" get get current user
           required: true
           type: string
+        - name: Cookie
+          in: header
+          description: token in cookie
+          type: string
+          required: true
         responses:
           "200":
             description: Success
@@ -208,6 +254,11 @@ paths:
           description: Password of user
           required: true
           type: string
+        - name: Cookie
+          in: header
+          description: token in cookie
+          type: string
+          required: true
         responses:
           "200":
             description: Success

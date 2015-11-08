@@ -3,7 +3,6 @@
  */
 "use strict";
 
-let commons = require('./commons');
 let apiwrap = require('./apibase').apiwrap;
 
 let assignments = {};
@@ -23,7 +22,7 @@ assignments.listAll = apiwrap((req, res, gitlab) => {
   });
 });
 
-assignments.get = (req, res) => {
+assignments.get = apiwrap((req, res, gitlab) => {
   let id = req.swagger.params.id.value;
   return new Promise((resolve, reject) => {
       gitlab.projects.show(id, (project) => {
@@ -37,6 +36,6 @@ assignments.get = (req, res) => {
     res.write(JSON.stringify(val));
     res.end();
   });
-};
+});
 
 module.exports = assignments;

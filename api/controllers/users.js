@@ -3,12 +3,11 @@
  */
 "use strict";
 
-let commons = require('./commons');
-let gitlab = require('gitlab')(commons.authObj);
+let apiwrap = require('./apibase').apiwrap;
 
 let users = {};
 
-users.get = (req, res) => {
+users.get = apiwrap((req, res, gitlab) => {
   let id = req.swagger.params.id.value;
 
 
@@ -31,6 +30,6 @@ users.get = (req, res) => {
     res.write(JSON.stringify(val));
     res.end();
   });
-};
+});
 
 module.exports = users;
