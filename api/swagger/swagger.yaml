@@ -8,7 +8,6 @@ host: localhost:10010
 basePath: /api/v1
 # 
 schemes:
-  # tip: remove http to make production-grade
   - http
   - https
 # format of bodies a client can send (Content-Type)
@@ -24,6 +23,12 @@ paths:
       get:
         description: get all classes enrolled
         operationId: listAll
+        parameters:
+        - name: Cookie
+          in: header
+          description: token in cookie
+          type: string
+          required: true
         responses:
           "200":
             description: Success
@@ -178,6 +183,29 @@ paths:
         - name: id
           in: path
           description: user id, user "me" get get current user
+          required: true
+          type: string
+        responses:
+          "200":
+            description: Success
+          default:
+            description: Error
+            schema:
+              $ref: "#/definitions/ErrorResponse"
+  /session/login:
+      x-swagger-router-controller: session
+      get:
+        description: Login and set token in cookie
+        operationId: login
+        parameters:
+        - name: username
+          in: query
+          description: Username or Email 
+          required: true
+          type: string
+        - name: password
+          in: query
+          description: Password of user
           required: true
           type: string
         responses:

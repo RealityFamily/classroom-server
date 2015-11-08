@@ -5,10 +5,11 @@
 
 let commons = require('./commons');
 let gitlab = require('gitlab')(commons.authObj);
+let apiwrap = require('./apibase').apiwrap;
 
 let classes = {};
 
-classes.listAll = (req, res) => {
+classes.listAll = apiwrap((req, res) => {
   return new Promise((resolve, reject) => {
       gitlab.groups.all((groups) => {
         let classes = [];
@@ -25,7 +26,7 @@ classes.listAll = (req, res) => {
     res.write(JSON.stringify(val));
     res.end();
   });
-};
+});
 
 classes.get = (req, res) => {
   let id = req.swagger.params.id.value;
