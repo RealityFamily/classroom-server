@@ -18,18 +18,24 @@ session.login = (req, res) => {
   let password = req.swagger.params.password.value;
 
   gitlabUnauth.users.session(username, password, (ret) => {
-    if (Object.isObject(ret)) {
-      console.log(ret.private_token);
+    if (typeof ret == 'object') {
       res.writeHead(200, {
         'Content-Type': 'application/json',
-        'Set-Cookie:': 'token=' + ret.private_token
+        'Set-Cookie': 'token=' + ret.private_token + '; Path=/; '
       });
+      res.write(JSON.stringify({
+        'message': 'ok',
+        'token': ret.private_token
+      }));
       res.end();
     } else {
       res.writeHead(401, {
         'Content-Type': 'application/json',
-        'Set-Cookie:': 'token='
+        'Set-Cookie': 'token='
       });
+      res.write(JSON.stringify({
+        'message': '401 unauthorized'
+      }));
       res.end();
     }
   });

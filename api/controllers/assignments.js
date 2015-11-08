@@ -4,11 +4,11 @@
 "use strict";
 
 let commons = require('./commons');
-let gitlab = require('gitlab')(commons.authObj);
+let apiwrap = require('./apibase').apiwrap;
 
 let assignments = {};
 
-assignments.listAll = (req, res) => {
+assignments.listAll = apiwrap((req, res, gitlab) => {
   return new Promise((resolve, reject) => {
       gitlab.projects.all((projects) => {
         resolve(projects);
@@ -21,7 +21,7 @@ assignments.listAll = (req, res) => {
     res.write(JSON.stringify(val));
     res.end();
   });
-};
+});
 
 assignments.get = (req, res) => {
   let id = req.swagger.params.id.value;
