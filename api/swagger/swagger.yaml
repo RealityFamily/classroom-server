@@ -254,11 +254,6 @@ paths:
           description: Password of user
           required: true
           type: string
-        - name: Cookie
-          in: header
-          description: token in cookie
-          type: string
-          required: true
         responses:
           "200":
             description: Success

@@ -11,7 +11,6 @@ let apibase = {};
 let parseCookies = (cookie) => {
   var list = {},
       rc = cookie;
-  console.log(rc);
 
   rc && rc.split(';').forEach(function( cookie ) {
     var parts = cookie.split('=');
