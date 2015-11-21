@@ -10,12 +10,7 @@ let classes = {};
 classes.listAll = apiwrap((req, res, gitlab) => {
   return new Promise((resolve, reject) => {
       gitlab.groups.all((groups) => {
-        let classes = [];
-        for (let group of groups) {
-          if (group.name.indexOf('-') != -1) {
-            classes.push(group);
-          }
-        }
+        let classes = require('../filters/classes').getClasses(groups);
         resolve(classes);
       });
     }
@@ -54,7 +49,7 @@ classes.listAssignments = apiwrap((req, res, gitlab) => {
       });
     }
   ).then((assignments)=> {
-    let filterFactory = require('../helpers/filters');
+    let filterFactory = require('../filters/filters');
     let val = filterFactory.assignmentsFilter(assignments);
     res.writeHead(200, {'Content-Type': 'application/json'});
     res.write(JSON.stringify(val));
@@ -80,7 +75,7 @@ classes.listMaterials = apiwrap((req, res, gitlab) => {
       });
     });
   }).then((materials)=> {
-    let filterFactory = require('../helpers/filters');
+    let filterFactory = require('../filters/filters');
     let val = filterFactory.materialsFilter(materials);
     res.writeHead(200, {'Content-Type': 'application/json'});
     res.write(JSON.stringify(val));
@@ -96,7 +91,7 @@ classes.listMembers = apiwrap((req, res, gitlab) => {
       });
     }
   ).then((members)=> {
-    let filterFactory = require('../helpers/filters');
+    let filterFactory = require('../filters/filters');
     let val = filterFactory.membersFilter(members);
     res.writeHead(200, {'Content-Type': 'application/json'});
     res.write(JSON.stringify(val));
@@ -123,7 +118,7 @@ classes.listNotifications = apiwrap((req, res, gitlab) => {
       }
     )
   }).then((issues)=> {
-    let filterFactory = require('../helpers/filters');
+    let filterFactory = require('../filters/filters');
     let val = filterFactory.notificationsFilter(issues);
     res.writeHead(200, {'Content-Type': 'application/json'});
     res.write(JSON.stringify(val));
@@ -152,7 +147,7 @@ classes.listActivities = apiwrap((req, res, gitlab) => {
       }
     )
   }).then((activitiesObj)=> {
-    let filterFactory = require('../helpers/filters');
+    let filterFactory = require('../filters/filters');
     let val = filterFactory.activitiesFilter(activitiesObj);
     res.writeHead(200, {'Content-Type': 'application/json'});
     res.write(JSON.stringify(val));

@@ -6,10 +6,10 @@
 let commons = {};
 
 /* Admin */
-//commons.authObj = {
-//    url: 'https://git.fdu13ss.org',
-//    token: 'xBMsRW6nzapY4wFfVGFT'
-//};
+commons.adminAuthObj = {
+    url: 'https://git.fdu13ss.org',
+    token: 'xBMsRW6nzapY4wFfVGFT'
+};
 
 /* Test Robot */
 commons.authObj = {
@@ -19,7 +19,7 @@ commons.authObj = {
 
 commons.unauthObj = {
   url: 'https://git.fdu13ss.org',
-  token: '1'
+  token: 'Fuck'
 };
 
 module.exports = commons;

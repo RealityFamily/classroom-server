@@ -14,7 +14,7 @@ assignments.listAll = apiwrap((req, res, gitlab) => {
       });
     }
   ).then((projects) => {
-    let filterFactory = require('../helpers/filters');
+    let filterFactory = require('../filters/filters');
     let val = filterFactory.assignmentsFilter(projects, true, true);
     res.writeHead(200, {'Content-Type': 'application/json'});
     res.write(JSON.stringify(val));
@@ -30,7 +30,7 @@ assignments.get = apiwrap((req, res, gitlab) => {
       });
     }
   ).then((project) => {
-    let filterFactory = require('../helpers/filters');
+    let filterFactory = require('../filters/filters');
     let val = filterFactory.assignmentFilter(project);
     res.writeHead(200, {'Content-Type': 'application/json'});
     res.write(JSON.stringify(val));
