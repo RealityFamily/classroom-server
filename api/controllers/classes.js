@@ -205,4 +205,19 @@ classes.createAssignment = apiwrap((req, res, gitlab) => {
   });
 });
 
+classes.forkAssignment = apiwrap((req, res, gitlab) => {
+  let pid = req.swagger.params.pid.value;
+  return new Promise((resolve, reject) => {
+    // TODO: not graceful. remember to send them a PR.
+    gitlab.post(`/projects/fork/${pid}`, {}, function (result) {
+      resolve(result);
+    });
+  }).then((val) => {
+    res.writeHead(200, {'Content-Type': 'application/json'});
+    res.write(JSON.stringify(val));
+    res.end();
+  });
+});
+
+
 module.exports = classes;

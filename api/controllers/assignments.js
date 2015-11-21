@@ -36,4 +36,19 @@ assignments.get = apiwrap((req, res, gitlab) => {
   });
 });
 
+assignments.remove = apiwrap((req, res, gitlab) => {
+  let id = req.swagger.params.id.value;
+  return new Promise((resolve, reject) => {
+      gitlab.projects.remove(id, (result) => {
+        resolve(result);
+      });
+    }
+  ).then((val) => {
+    res.writeHead(200, {'Content-Type': 'application/json'});
+    res.write(JSON.stringify(val));
+    res.end();
+  });
+});
+
+
 module.exports = assignments;
