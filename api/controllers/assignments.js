@@ -10,12 +10,11 @@ let assignments = {};
 assignments.listAll = apiwrap((req, res, gitlab) => {
   return new Promise((resolve, reject) => {
       gitlab.projects.all((projects) => {
-        resolve(projects);
+        let assignments_ = require('../filters/assignments').parseAssignments(projects, true, true);
+        resolve(assignments_);
       });
     }
-  ).then((projects) => {
-    let filterFactory = require('../filters/filters');
-    let val = filterFactory.assignmentsFilter(projects, true, true);
+  ).then((val) => {
     res.writeHead(200, {'Content-Type': 'application/json'});
     res.write(JSON.stringify(val));
     res.end();
@@ -26,12 +25,11 @@ assignments.get = apiwrap((req, res, gitlab) => {
   let id = req.swagger.params.id.value;
   return new Promise((resolve, reject) => {
       gitlab.projects.show(id, (project) => {
-        resolve(project);
+        let assignment_ = require('../filters/assignments').parseAssignment(projects);
+        resolve(assignment_);
       });
     }
-  ).then((project) => {
-    let filterFactory = require('../filters/filters');
-    let val = filterFactory.assignmentFilter(project);
+  ).then((val) => {
     res.writeHead(200, {'Content-Type': 'application/json'});
     res.write(JSON.stringify(val));
     res.end();

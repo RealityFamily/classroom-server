@@ -4,36 +4,36 @@
 "use strict";
 
 class ClassesFilter {
-  static getClasses(classes) {
+  static parseClasses(classes) {
     let results = [];
 
     for (let class_ of classes) {
-      class_ = ClassesFilter.getClass(class_);
+      class_ = ClassesFilter.parseClass(class_);
       if (class_) results.push(class_);
     }
     return results;
   };
 
-  static getClass(class_) {
+  static parseClass(class_) {
     if (class_.name == 'best-practices') return false;
 
-    //console.log(class_);
-    let semester = ClassesFilter.getSemester(class_);
-    if (!semester) return;
+    let semesterObj = class_.name.match(/-(\S+)/);
+    let nameObj = class_.name.match(/(\S+)-/);
 
-    class_.semester = semester;
+    // invalid class
+    if (!semesterObj || !nameObj) return false;
 
+    class_.semester = semesterObj[1];
+    class_.name = nameObj[1];
+
+    if (class_.projects) {
+      let assignmentsFilter = require('../filters/assignments');
+      class_.assignments = assignmentsFilter.parseAssignments(class_.projects, false, true);
+      delete class_.projects;
+    }
     return class_;
   };
 
-  static getSemester(class_) {
-    let semesterObj = class_.name.match(/-(\S+)/);
-
-    // invalid class
-    if (!semesterObj) return false;
-
-    return semesterObj[1];
-  };
 }
 
 module.exports = ClassesFilter;

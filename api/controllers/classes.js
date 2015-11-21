@@ -7,11 +7,13 @@ let apiwrap = require('./apibase').apiwrap;
 
 let classes = {};
 
+let assignmentsFilter = require('../filters/assignments');
+let classesFilter = require('../filters/classes');
+
 classes.listAll = apiwrap((req, res, gitlab) => {
   return new Promise((resolve, reject) => {
       gitlab.groups.all((groups) => {
-        let classes = require('../filters/classes').getClasses(groups);
-        resolve(classes);
+        resolve(classesFilter.parseClasses(groups));
       });
     }
   ).then((val) => {
@@ -25,7 +27,7 @@ classes.get = apiwrap((req, res, gitlab) => {
   let id = req.swagger.params.id.value;
   return new Promise((resolve, reject) => {
       gitlab.groups.show(id, function (group) {
-        resolve(group);
+        resolve(classesFilter.parseClass(group));
       });
     }
   ).then((val) => {
@@ -39,18 +41,10 @@ classes.listAssignments = apiwrap((req, res, gitlab) => {
   let id = req.swagger.params.id.value;
   return new Promise((resolve, reject) => {
       gitlab.groups.listProjects(id, function (projects) {
-        let assignments = [];
-        for (let project of projects) {
-          if (project.name != 'syllabus') {
-            assignments.push(project);
-          }
-        }
-        resolve(assignments);
+        resolve(assignmentsFilter.parseAssignments(projects));
       });
     }
-  ).then((assignments)=> {
-    let filterFactory = require('../filters/filters');
-    let val = filterFactory.assignmentsFilter(assignments);
+  ).then((val)=> {
     res.writeHead(200, {'Content-Type': 'application/json'});
     res.write(JSON.stringify(val));
     res.end();
