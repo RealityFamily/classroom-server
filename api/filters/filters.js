@@ -6,32 +6,8 @@
 
 let filterFactory = {};
 
-
-
-filterFactory.notificationFilter = (notification) => {
-  if (notification.state == 'closed') {
-    return null;
-  }
-  delete notification.assignee;
-
-  notification.item_type = 'notification';
-  return notification;
-};
-
-filterFactory.notificationsFilter = (notifications) => {
-  let results = [];
-  for (let notification of notifications) {
-    let result = filterFactory.notificationFilter(notification);
-    if (result) {
-      results.push(result);
-    }
-  }
-  return results;
-};
-
-
 filterFactory.activitiesFilter = (activitiesObj) => {
-  let notifications = filterFactory.notificationsFilter(activitiesObj.notifications);
+  let notifications = NotificationsFilter.parseNotification(activitiesObj.notifications);
   let assignments = filterFactory.assignmentsFilter(activitiesObj.assignments);
 
   let results = assignments.concat(notifications);

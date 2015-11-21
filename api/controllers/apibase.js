@@ -5,6 +5,8 @@
 "use strict";
 
 let gitlab = require('gitlab');
+let commons = require('./commons');
+
 
 let apibase = {};
 
@@ -24,7 +26,7 @@ apibase.apiwrap = (func) => {
   return (req, res) => {
     let cookies = parseCookies(req.swagger.params.Cookie.value);
     let userGitlab = gitlab({
-      url: 'https://git.fdu13ss.org',
+      url: commons.server.url,
       token: cookies.token
     });
     return func(req, res, userGitlab);

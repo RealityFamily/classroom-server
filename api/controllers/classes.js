@@ -11,6 +11,7 @@ let assignmentsFilter = require('../filters/assignments');
 let classesFilter = require('../filters/classes');
 let materialsFilter = require('../filters/materials');
 let membersFilter = require('../filters/members');
+let notificationsFilter = require('../filters/notifications');
 
 classes.listAll = apiwrap((req, res, gitlab) => {
   return new Promise((resolve, reject) => {
@@ -99,6 +100,7 @@ classes.listNotifications = apiwrap((req, res, gitlab) => {
         for (let project of projects) {
           if (project.name == 'syllabus') {
             resolve(project);
+            return;
           }
         }
       });
@@ -106,13 +108,11 @@ classes.listNotifications = apiwrap((req, res, gitlab) => {
   ).then((syllabus)=> {
     return new Promise((resolve, reject) => {
         gitlab.projects.issues.list(syllabus.id, function (issues) {
-          resolve(issues);
+          resolve(notificationsFilter.parseNotifications(issues));
         });
       }
     )
-  }).then((issues)=> {
-    let filterFactory = require('../filters/filters');
-    let val = filterFactory.notificationsFilter(issues);
+  }).then((val)=> {
     res.writeHead(200, {'Content-Type': 'application/json'});
     res.write(JSON.stringify(val));
     res.end();

@@ -5,20 +5,25 @@
 
 let commons = {};
 
+//var fs = require("fs");
+let yaml = require("js-yaml");
+commons.server = require("../../config/server.yaml").servers.test;
+console.log(`Using ${JSON.stringify(commons.server)}.`);
+
 /* Admin */
 commons.adminAuthObj = {
-    url: 'https://git.fdu13ss.org',
-    token: 'xBMsRW6nzapY4wFfVGFT'
+    url: commons.server.url,
+    token: commons.server.admin_token
 };
 
 /* Test Robot */
 commons.authObj = {
-  url: 'https://git.fdu13ss.org',
-  token: 'Fx33Gwhs2uoLctCRAjhr'
+  url: commons.server.url,
+  token: commons.server.test_token
 };
 
 commons.unauthObj = {
-  url: 'https://git.fdu13ss.org',
+  url: commons.server.url,
   token: 'Fuck'
 };
 
