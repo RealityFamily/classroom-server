@@ -6,8 +6,8 @@
 let commons = require('./commons');
 let apiwrap = require('./apibase').apiwrap;
 
-let notifications = {};
+let notices = {};
 
 
 
-module.exports = notifications;
+module.exports = notices;

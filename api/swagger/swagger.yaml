@@ -128,15 +128,43 @@ paths:
             description: Error
             schema:
               $ref: "#/definitions/ErrorResponse"
-  /classes/{id}/notifications:
+  /classes/{id}/notices:
       x-swagger-router-controller: classes
       get:
-        description: get all notifications of a class
-        operationId: listNotifications
+        description: get all notices of a class
+        operationId: listNotices
         parameters:
         - name: id
           in: path
           description: class id
+          required: true
+          type: string
+        - name: Cookie
+          in: header
+          description: token in cookie
+          type: string
+          required: true
+        responses:
+          "200":
+            description: Success
+          default:
+            description: Error
+            schema:
+              $ref: "#/definitions/ErrorResponse"
+  /classes/{id}/notices/{iid}:
+      x-swagger-router-controller: classes
+      get:
+        description: get all notices of a class
+        operationId: getNotice
+        parameters:
+        - name: id
+          in: path
+          description: class id
+          required: true
+          type: string
+        - name: iid
+          in: path
+          description: notice id
           required: true
           type: string
         - name: Cookie
