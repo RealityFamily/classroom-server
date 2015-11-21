@@ -8,13 +8,13 @@ class AssignmentsFilter {
     let results = [];
     for (let project of projects) {
       let result = AssignmentsFilter.parseAssignment(project, strictMode);
-      if (result) results.push(project);
+      if (result) results.push(result);
     }
     results.sort((a, b)=> {
       if (asec) {
-        return (a.daysLeft - b.daysLeft) && b.daysLeft >= 0;
+        return (a.days_left - b.days_left) && b.days_left >= 0;
       } else {
-        return b.daysLeft - a.daysLeft;
+        return b.days_left - a.days_left;
       }
     });
     return results;
@@ -31,7 +31,7 @@ class AssignmentsFilter {
     }
 
     project.deadline = new Date(ddl[1]);
-    project.daysLeft = Math.floor((project.deadline - Date.now()) / 1000 / 24 / 3600);
+    project.days_left = Math.floor((project.deadline - Date.now()) / 1000 / 24 / 3600);
     if (project["forked_from_project"]) {
       project.class_name = project["forked_from_project"]["name_with_namespace"].match(/^(\S+)/)[1];
     } else {
@@ -40,7 +40,6 @@ class AssignmentsFilter {
 
     project.item_type = 'assignment';
 
-    delete project.default_branch;
     delete project.tag_list;
     delete project.public;
     delete project.archived;
@@ -53,6 +52,11 @@ class AssignmentsFilter {
     delete project.star_count;
     delete project.path;
     delete project.path_with_namespace;
+    delete project.owner;
+    if (project.forked_from_project) {
+      delete project.forked_from_project.path;
+      delete project.forked_from_project.path_with_namespace;
+    }
 
     return project;
   };

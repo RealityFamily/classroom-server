@@ -9,6 +9,8 @@ let classes = {};
 
 let assignmentsFilter = require('../filters/assignments');
 let classesFilter = require('../filters/classes');
+let materialsFilter = require('../filters/materials');
+let membersFilter = require('../filters/members');
 
 classes.listAll = apiwrap((req, res, gitlab) => {
   return new Promise((resolve, reject) => {
@@ -58,6 +60,7 @@ classes.listMaterials = apiwrap((req, res, gitlab) => {
         for (let project of projects) {
           if (project.name == 'syllabus') {
             resolve(project);
+            return;
           }
         }
       });
@@ -65,12 +68,10 @@ classes.listMaterials = apiwrap((req, res, gitlab) => {
   ).then((syllabus)=> {
     return new Promise((resolve, reject) => {
       gitlab.projects.repository.listTree(syllabus.id, function (list) {
-        resolve(list);
+        resolve(materialsFilter.parseMaterials(list, syllabus.web_url, syllabus.default_branch));
       });
     });
-  }).then((materials)=> {
-    let filterFactory = require('../filters/filters');
-    let val = filterFactory.materialsFilter(materials);
+  }).then((val)=> {
     res.writeHead(200, {'Content-Type': 'application/json'});
     res.write(JSON.stringify(val));
     res.end();
@@ -81,12 +82,10 @@ classes.listMembers = apiwrap((req, res, gitlab) => {
   let id = req.swagger.params.id.value;
   return new Promise((resolve, reject) => {
       gitlab.groups.listMembers(id, function (members) {
-        resolve(members);
+        resolve(membersFilter.parseMembers(members));
       });
     }
-  ).then((members)=> {
-    let filterFactory = require('../filters/filters');
-    let val = filterFactory.membersFilter(members);
+  ).then((val)=> {
     res.writeHead(200, {'Content-Type': 'application/json'});
     res.write(JSON.stringify(val));
     res.end();
