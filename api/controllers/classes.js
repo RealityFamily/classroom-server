@@ -17,6 +17,7 @@ let activitiesFilter = require('../filters/activities');
 classes.listAll = apiwrap((req, res, gitlab) => {
   return new Promise((resolve, reject) => {
       gitlab.groups.all((groups) => {
+        console.log(groups);
         resolve(classesFilter.parseClasses(groups));
       });
     }
@@ -173,6 +174,34 @@ classes.listActivities = apiwrap((req, res, gitlab) => {
     res.writeHead(200, {'Content-Type': 'application/json'});
     res.write(JSON.stringify(val));
     res.end();
+  });
+});
+
+classes.createAssignment = apiwrap((req, res, gitlab) => {
+  let id = req.swagger.params.id.value;
+  let assignmentObj = req.swagger.params.assignment_obj.value;
+  return new Promise((resolve, reject) => {
+    gitlab.groups.show(id, function (group) {
+      resolve(group);
+    });
+  }).then((class_) => {
+    return new Promise((resolve, reject) => {
+      let param = {};
+      //console.log(class_);
+      param.path = `${class_.path}-${assignmentObj.name}`;
+      param.name = `${class_.name}-${assignmentObj.name}`;
+      param.description = `${assignmentObj.description} %ddl:${assignmentObj.deadline}%`;
+      param.namespace_id = id;
+      if (assignmentObj.import_url) param.import_url = assignmentObj.import_url;
+      console.log(param);
+      gitlab.projects.create(param, function (project) {
+        resolve(project);
+      });
+    }).then((val)=> {
+      res.writeHead(200, {'Content-Type': 'application/json'});
+      res.write(JSON.stringify(val));
+      res.end();
+    });
   });
 });
 

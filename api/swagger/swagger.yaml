@@ -82,6 +82,33 @@ paths:
             description: Error
             schema:
               $ref: "#/definitions/ErrorResponse"
+      post:
+        description: create a new assignment
+        operationId: createAssignment
+        parameters:
+        - name: id
+          in: path
+          description: class id
+          required: true
+          type: string
+        - name: assignment_obj
+          in: body
+          description: assignment, deadline must be a vaild javascript date, '%2015-11-10T23:59:59Z' for example
+          required: true
+          schema:
+              $ref: "#/definitions/CreateAssignmentRequestBody"
+        - name: Cookie
+          in: header
+          description: token in cookie
+          type: string
+          required: true
+        responses:
+          "200":
+            description: Success
+          default:
+            description: Error
+            schema:
+              $ref: "#/definitions/ErrorResponse"
   /classes/{id}/materials:
       x-swagger-router-controller: classes
       get:
@@ -302,4 +329,18 @@ definitions:
       - message
     properties:
       message:
+        type: string
+  CreateAssignmentRequestBody:
+    required:
+      - name
+      - description
+      - deadline
+    properties:
+      name: 
+        type: string
+      description: 
+        type: string
+      deadline: 
+        type: string
+      import_url: 
         type: string

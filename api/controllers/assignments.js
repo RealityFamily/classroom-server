@@ -25,7 +25,7 @@ assignments.get = apiwrap((req, res, gitlab) => {
   let id = req.swagger.params.id.value;
   return new Promise((resolve, reject) => {
       gitlab.projects.show(id, (project) => {
-        let assignment_ = require('../filters/assignments').parseAssignment(projects);
+        let assignment_ = require('../filters/assignments').parseAssignment(project);
         resolve(assignment_);
       });
     }
