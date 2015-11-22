@@ -85,6 +85,7 @@ classes.listMembers = apiwrap((req, res, gitlab) => {
   let id = req.swagger.params.id.value;
   return new Promise((resolve, reject) => {
       gitlab.groups.listMembers(id, function (members) {
+        console.log(members);
         resolve(membersFilter.parseMembers(members));
       });
     }
@@ -187,13 +188,12 @@ classes.createAssignment = apiwrap((req, res, gitlab) => {
   }).then((class_) => {
     return new Promise((resolve, reject) => {
       let param = {};
-      //console.log(class_);
       param.path = `${class_.path}-${assignmentObj.name}`;
       param.name = `${class_.name}-${assignmentObj.name}`;
       param.description = `${assignmentObj.description} %ddl:${assignmentObj.deadline}%`;
       param.namespace_id = id;
       if (assignmentObj.import_url) param.import_url = assignmentObj.import_url;
-      console.log(param);
+
       gitlab.projects.create(param, function (project) {
         resolve(project);
       });

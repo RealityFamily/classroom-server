@@ -22,10 +22,7 @@ users.get = apiwrap((req, res, gitlab) => {
         });
       }
     }
-  ).then((user) => {
-    //let filterFactory = require('../helpers/filters');
-    //let val = filterFactory.userFilter(user);
-    let val =user;
+  ).then((val) => {
     res.writeHead(200, {'Content-Type': 'application/json'});
     res.write(JSON.stringify(val));
     res.end();
