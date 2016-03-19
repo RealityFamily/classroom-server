@@ -8,7 +8,6 @@
   "license": "",
   "main": "app.js",
   "dependencies": {
-    "express": "^4.12.3",
 	"swagger-express-mw": "^0.1.0",
 	"body-parser": "~1.13.2",
 	"cookie-parser": "~1.3.5",
@@ -25,6 +24,7 @@
   },
   "scripts": {
     "start": "node app.js",
-    "test": "swagger project test"
+    "test": "swagger project test",
+    "build": "docker build -t classroom-server ."
   }
 }
