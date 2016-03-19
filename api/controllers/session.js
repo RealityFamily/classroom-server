@@ -41,4 +41,17 @@ session.login = (req, res) => {
   });
 };
 
+session.token_login = (req, res) => {
+  let token = req.swagger.params.token.value;
+
+  res.writeHead(200, {
+    'Content-Type': 'application/json',
+    'Set-Cookie': 'token=' + token + '; Path=/; '
+  });
+  res.write(JSON.stringify({
+    'message': 'ok'
+  }));
+  res.end();
+};
+
 module.exports = session;

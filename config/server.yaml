@@ -1,5 +1,6 @@
 servers:
   test:
-    url: 'https://git.fdu13ss.org'
+#    url: 'https://git.fdu13ss.org'
+    url: 'http://10.131.226.145:10080'
     admin_token: "xBMsRW6nzapY4wFfVGFT"
     test_token: "Fx33Gwhs2uoLctCRAjhr"

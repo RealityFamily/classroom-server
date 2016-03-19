@@ -388,6 +388,26 @@ paths:
             description: Error
             schema:
               $ref: "#/definitions/ErrorResponse"
+
+  /session/token_login:
+      x-swagger-router-controller: session
+      get:
+        description: Just set the token in cookie
+        operationId: token_login
+        parameters:
+        - name: token
+          in: query
+          description: token
+          required: true
+          type: string
+        responses:
+          "200":
+            description: Success
+          default:
+            description: Error
+            schema:
+              $ref: "#/definitions/ErrorResponse"
+
 # complex objects have schema definitions
 definitions:
   ErrorResponse:
